@@ -1,0 +1,95 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vaultutils"
+dynamic = ["version"]
+description = 'A tool for efficient Vault authentication and secret fetching'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = ["vault", "authentication", "secrets", "qatoolist", "automation", "testing", "utils"]
+authors = [
+  { name = "Anand Chavan", email = "qatoolist@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+    "hvac",
+    "click",
+    "flask",
+    "requests",
+    "playwright",
+    "gunicorn",
+]
+
+scripts = { "vaultutils" = "vaultutils.cli:cli" }
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "coverage",
+]
+
+[project.urls]
+Documentation = "https://github.com/qatoolist/vaultutils#readme"
+Issues = "https://github.com/qatoolist/vaultutils/issues"
+Source = "https://github.com/qatoolist/vaultutils"
+
+[tool.hatch.version]
+path = "src/vaultutils/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "pre-commit",
+  "pre-commit-hooks",
+  "mypy>=1.0.0",
+  "pytest",
+  "ruff",
+  "black",
+  "cachetools",
+]
+
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/vaultutils tests}"
+
+[tool.coverage.run]
+source_pkgs = ["vaultutils", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/vaultutils/__about__.py",
+]
+
+[tool.coverage.paths]
+vaultutils = ["src/vaultutils", "*/vaultutils/src/vaultutils"]
+tests = ["tests", "*/vaultutils/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "C", "N", "Q"]
+ignore = ["E501"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vaultutils"]
