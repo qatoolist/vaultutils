@@ -125,25 +125,25 @@ The Flask server provides several endpoints for managing Vault secrets.
 
 ## Development
 
+### Makefile
+
+A `Makefile` is provided to simplify development tasks.
+
 ### Testing
 
-The `vaultutils` package includes a comprehensive set of unit tests using `unittest` and `unittest.mock`. To run the tests:
+The `vaultutils` package includes a comprehensive set of unit tests using `pytest`. To run the tests:
 
 1. Install the development dependencies:
 
 ```bash
-pip install -e .[dev]
+make full
 ```
 
-2. Run the tests using `unittest`:
+2. Run the tests using `pytest`:
 
 ```bash
-python -m unittest discover -s vaultutils/tests
+make test
 ```
-
-### Makefile
-
-A `Makefile` is provided to simplify development tasks.
 
 ## License
 
