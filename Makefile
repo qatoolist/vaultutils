@@ -72,7 +72,9 @@ uninstall:
 
 install: build
 	@echo "Installing the project from wheel..."
-	@pip install $(WHEEL_FILE)
+	@VERSION=$$(hatch version); \
+	WHEEL_FILE=dist/$(PROJECT_NAME)-$$VERSION-py3-none-any.whl; \
+	pip install $$WHEEL_FILE
 
 stop:
 	@echo "Stopping the Vault Manager server..."

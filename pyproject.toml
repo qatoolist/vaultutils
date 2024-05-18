@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -31,6 +31,7 @@ dependencies = [
     "requests",
     "playwright",
     "gunicorn",
+    "cachetools",
 ]
 
 scripts = { "vaultutils" = "vaultutils.cli:cli" }
@@ -39,6 +40,12 @@ scripts = { "vaultutils" = "vaultutils.cli:cli" }
 dev = [
     "pytest",
     "coverage",
+    "pytest-mock",
+    "hatch-vcs",
+]
+
+build = [
+  "hatch-vcs"
 ]
 
 [project.urls]
@@ -47,7 +54,8 @@ Issues = "https://github.com/qatoolist/vaultutils/issues"
 Source = "https://github.com/qatoolist/vaultutils"
 
 [tool.hatch.version]
-path = "src/vaultutils/__about__.py"
+raw-options.version_scheme = "calver-by-date"
+source="vcs"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
@@ -57,7 +65,7 @@ extra-dependencies = [
   "pytest",
   "ruff",
   "black",
-  "cachetools",
+  "hatch-vcs"
 ]
 
 [tool.hatch.envs.types.scripts]
@@ -70,6 +78,15 @@ parallel = true
 omit = [
   "src/vaultutils/__about__.py",
 ]
+
+[[tool.hatch.envs.test.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vaultutils"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/vaultutils", "Makefile", "pyproject.toml", "README.md"]
 
 [tool.coverage.paths]
 vaultutils = ["src/vaultutils", "*/vaultutils/src/vaultutils"]
@@ -91,5 +108,3 @@ line-length = 88
 select = ["E", "F", "W", "C", "N", "Q"]
 ignore = ["E501"]
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/vaultutils"]
