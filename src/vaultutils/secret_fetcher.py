@@ -1,9 +1,12 @@
-from typing import Optional, Any
-from hvac import Client  # type: ignore
+from typing import Any, Optional
+
 from cachetools import TTLCache
+from hvac import Client  # type: ignore
+
 from vaultutils.auth import login_vault
-from vaultutils.utils import singleton
 from vaultutils.config import Config
+from vaultutils.utils import singleton
+
 
 @singleton
 class VaultSecretFetcher:
@@ -17,7 +20,9 @@ class VaultSecretFetcher:
         """
         self.client = Client(url=Config.VAULT_URL)
         self.mount_point = Config.VAULT_MOUNT_POINT
-        self.cache = TTLCache(maxsize=100, ttl=300)  # Cache with max size 100 and TTL 300 seconds
+        self.cache = TTLCache(
+            maxsize=100, ttl=300
+        )  # Cache with max size 100 and TTL 300 seconds
 
     def fetch_secret(self, path: str, key: Optional[str] = None) -> Any:
         """
@@ -43,7 +48,8 @@ class VaultSecretFetcher:
             if key in secrets:
                 return secrets[key]
             else:
-                raise KeyError(f"Key {key} not found in path {path}")
+                err_msg: str = f"Key {key} not found in path {path}"
+                raise KeyError(err_msg)
         else:
             return secrets
 

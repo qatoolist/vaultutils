@@ -1,7 +1,9 @@
 import urllib.parse
-from hvac import Client  # type: ignore
 from functools import wraps
 from typing import Any, Dict, TypeVar
+
+from hvac import Client  # type: ignore
+
 
 def _extract_auth_url_params(auth_url: str) -> tuple[str, str]:
     """
@@ -20,9 +22,13 @@ def _extract_auth_url_params(auth_url: str) -> tuple[str, str]:
         auth_url_state = params["state"][0]
         return auth_url_nonce, auth_url_state
     except (IndexError, KeyError) as e:
-        raise ValueError(f"Error parsing authorization URL: {auth_url}") from e
+        err_msg: str = f"Error parsing authorization URL: {auth_url}"
+        raise ValueError(err_msg) from e
 
-def _get_oidc_client_token(vault_client: Client, code: str, nonce: str, state: str) -> str:
+
+def _get_oidc_client_token(
+    vault_client: Client, code: str, nonce: str, state: str
+) -> str:
     """
     Get OIDC client token from Vault using the authorization code.
 
@@ -44,7 +50,9 @@ def _get_oidc_client_token(vault_client: Client, code: str, nonce: str, state: s
     client_token = auth_result["auth"]["client_token"]
     return client_token
 
+
 T = TypeVar("T")
+
 
 def singleton(cls: T) -> T:
     """

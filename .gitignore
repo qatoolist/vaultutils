@@ -196,7 +196,3 @@ local.properties
 ##########
 *.out
 .vscode
-
-# But include specific files or directories within .github
-!.github/workflows/
-!.github/workflows/*.yml

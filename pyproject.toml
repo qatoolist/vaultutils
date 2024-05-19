@@ -68,6 +68,28 @@ extra-dependencies = [
   "hatch-vcs"
 ]
 
+[tool.hatch.envs.lint]
+extra-dependencies = [
+  "mypy>=1.0.0",
+  "ruff>=0.1.6",
+]
+
+[tool.hatch.envs.lint.scripts]
+typing = "mypy --install-types --non-interactive {args:src/words_tui tests}"
+style = [
+  "ruff {args:.}",
+  "ruff format {args:.}",
+]
+fmt = [
+  "ruff {args:.}",
+  "ruff --fix {args:.}",
+  "style",
+]
+all = [
+  "style",
+  "typing",
+]
+
 [tool.hatch.envs.types.scripts]
 check = "mypy --install-types --non-interactive {args:src/vaultutils tests}"
 
@@ -105,6 +127,45 @@ target-version = ['py38']
 
 [tool.ruff]
 line-length = 88
-select = ["E", "F", "W", "C", "N", "Q"]
-ignore = ["E501"]
+select = [
+  "A",
+  "ARG",
+  "B",
+  "C",
+  "DTZ",
+  "E",
+  "EM",
+  "F",
+  "FBT",
+  "I",
+  "ICN",
+  "ISC",
+  "N",
+  "PLC",
+  "PLE",
+  "PLR",
+  "PLW",
+  "Q",
+  "RUF",
+  "S",
+  "T",
+  "TID",
+  "UP",
+  "W",
+  "YTT",
+]
+ignore = ["E501", "PLW0602", "PLW0603", "B904", "S603", "S607", ]
+unfixable = [
+  # Don't touch unused imports
+  "F401",
+]
 
+[tool.ruff.isort]
+known-first-party = ["vaultutils"]
+
+[tool.ruff.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.per-file-ignores]
+# Tests can use magic values, assertions, and relative imports
+"tests/**/*" = ["PLR2004", "S101", "TID252"]

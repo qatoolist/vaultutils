@@ -1,7 +1,11 @@
-import requests
 import subprocess
+from http import HTTPStatus
+from typing import Any, Optional
+
+import requests
+
 from vaultutils.server import start_server, stop_server
-from typing import Optional, Any
+
 
 class VaultManagerClient:
     def __init__(self, host: str = "localhost", port: int = 8001) -> None:
@@ -21,16 +25,18 @@ class VaultManagerClient:
 
     def authenticate(self) -> str:
         """Authenticate with Vault using environment variables."""
-        response = requests.post(f"{self.base_url}/authenticate")
-        if response.status_code == 200:
+        response = requests.post(f"{self.base_url}/authenticate", timeout=5)
+        if response.status_code == HTTPStatus.OK:
             return response.json()["token"]
         else:
-            raise Exception(f"Error during authentication: {response.status_code} - {response.text}")
+            err_msg: str = (
+                f"Error during authentication: {response.status_code} - {response.text}"
+            )
+            raise Exception(err_msg)
 
     def fetch_secret(self, path: str, key: Optional[str] = None) -> dict[str, Any]:
         """Fetch a secret from Vault."""
-        response = requests.post(f"{self.base_url}/fetch-secret", json={
-            "path": path,
-            "key": key
-        })
+        response = requests.post(
+            f"{self.base_url}/fetch-secret", json={"path": path, "key": key}, timeout=5
+        )
         return response.json()
