@@ -40,6 +40,8 @@ window.onload = function load() {
 # Global variable to store the token
 global_token: Optional[str] = None
 
+logging.basicConfig(format="%(asctime)s - %(message)s", datefmt="%d-%b-%y %H:%M:%S")
+
 
 def get_stored_token() -> Optional[str]:
     global global_token

@@ -10,6 +10,8 @@ from vaultutils.views.vault_view import vault_blueprint
 app = Flask(__name__)
 app.register_blueprint(vault_blueprint)
 
+logging.basicConfig(format="%(asctime)s - %(message)s", datefmt="%d-%b-%y %H:%M:%S")
+
 
 def start_server() -> None:
     host = Config.VAULT_SERVER_HOST
