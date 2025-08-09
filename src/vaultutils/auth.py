@@ -8,7 +8,6 @@ from threading import Thread
 from typing import Any, List, Optional
 
 from hvac import Client, exceptions  # type: ignore
-from playwright.sync_api import sync_playwright  # type: ignore
 
 from vaultutils.config import Config
 from vaultutils.utils import _extract_auth_url_params, _get_oidc_client_token
@@ -91,6 +90,13 @@ def get_oidc_token(client: Client, oidc_callback_port: int = 8250) -> str:
 
     if Config.VAULT_OIDC_HEADLESS:
         time.sleep(3)
+        try:
+            from playwright.sync_api import sync_playwright  # type: ignore
+        except ModuleNotFoundError as exc:
+            raise RuntimeError(
+                "Playwright is required for headless OIDC authentication"
+            ) from exc
+
         with sync_playwright() as playwright:
             browser = playwright.firefox.launch(
                 headless=True,
