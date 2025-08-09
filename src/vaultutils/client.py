@@ -25,7 +25,7 @@ class VaultManagerClient:
 
     def authenticate(self) -> str:
         """Authenticate with Vault using environment variables."""
-        response = requests.post(f"{self.base_url}/authenticate", timeout=5)
+        response = requests.post(f"{self.base_url}/authenticate")
         if response.status_code == HTTPStatus.OK:
             return response.json()["token"]
         else:
@@ -37,6 +37,6 @@ class VaultManagerClient:
     def fetch_secret(self, path: str, key: Optional[str] = None) -> dict[str, Any]:
         """Fetch a secret from Vault."""
         response = requests.post(
-            f"{self.base_url}/fetch-secret", json={"path": path, "key": key}, timeout=5
+            f"{self.base_url}/fetch-secret", json={"path": path, "key": key}
         )
         return response.json()

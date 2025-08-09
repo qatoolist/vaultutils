@@ -7,7 +7,7 @@ from typing import Any, Tuple
 from flask import jsonify, request  # type: ignore
 from hvac import Client  # type: ignore
 
-from vaultutils.auth import login_vault
+from vaultutils import auth
 from vaultutils.config import Config
 from vaultutils.secret_fetcher import VaultSecretFetcher
 
@@ -24,11 +24,12 @@ class VaultController:
 
         try:
             with lock:
-                login_vault(client)
+                auth.login_vault(client)
         except Exception as e:
             return jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
-        return jsonify({"token": client.token})
+        token = client.token if isinstance(client.token, str) else str(client.token)
+        return jsonify({"token": token})
 
     @staticmethod
     def fetch_secret() -> Tuple[dict[str, Any], int]:
