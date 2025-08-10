@@ -17,6 +17,7 @@
 - [API Endpoints](#api-endpoints)
 - [Development](#development)
   - [Testing](#testing)
+- [Releasing](#releasing)
 - [License](#license)
 
 ## Installation
@@ -144,6 +145,19 @@ make full
 ```bash
 make test
 ```
+
+### Releasing
+
+The project uses calendar-based version tags in the form `v<dd.mm.yy>.<n>` where `n` is the release number for the day. To
+cut a new release:
+
+```bash
+make release
+```
+
+This command updates the version, creates a tag and pushes it to GitHub. A
+workflow then builds the project and uploads the artifacts to PyPI using the
+repository's `PYPI_TOKEN` secret.
 
 ## License
 

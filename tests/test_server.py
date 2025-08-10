@@ -3,14 +3,13 @@ from unittest.mock import MagicMock, patch  # noqa: F401
 
 import pytest  # type: ignore
 
-from vaultutils.server import start_server, stop_server  # type: ignore
+from vaultutils.server import app as flask_app  # type: ignore
+from vaultutils.server import start_server, stop_server
 
 
 @pytest.fixture
 def app():
-    from vaultutils.server import app
-
-    return app
+    return flask_app
 
 
 @pytest.fixture
@@ -30,7 +29,7 @@ def test_stop_server(mocker):
     mock_post = mocker.patch("requests.post")
     mock_post.return_value.status_code = HTTPStatus.OK
     stop_server()
-    mock_post.assert_called_once_with("http://localhost:8001/shutdown")
+    mock_post.assert_called_once_with("http://localhost:8001/shutdown", timeout=10)
 
 
 def test_authenticate(mocker, client):

@@ -71,7 +71,7 @@ def get_oidc_token(client: Client, oidc_callback_port: int = 8250) -> str:
             error_msg: str = "Authorization URL is empty"
             raise ValueError(error_msg)
     except Exception as error:
-        error_msg: str = f"Error while getting OIDC authorization URL: {error}"
+        error_msg = f"Error while getting OIDC authorization URL: {error}"
         raise ValueError(error_msg)
 
     logging.info(f"Authorization URL: {auth_url}")
@@ -91,11 +91,12 @@ def get_oidc_token(client: Client, oidc_callback_port: int = 8250) -> str:
     if Config.VAULT_OIDC_HEADLESS:
         time.sleep(3)
         try:
-            from playwright.sync_api import sync_playwright  # type: ignore
+            from playwright.sync_api import (  # type: ignore  # noqa: PLC0415
+                sync_playwright,
+            )
         except ModuleNotFoundError as exc:
-            raise RuntimeError(
-                "Playwright is required for headless OIDC authentication"
-            ) from exc
+            msg = "Playwright is required for headless OIDC authentication"
+            raise RuntimeError(msg) from exc
 
         with sync_playwright() as playwright:
             browser = playwright.firefox.launch(
@@ -130,7 +131,7 @@ def _start_local_http_server(oidc_callback_port: int, token_holder: List[Any]) -
     class AuthHandler(BaseHTTPRequestHandler):
         token: str = ""
 
-        def do_GET(self):  # noqa: N802
+        def do_GET(self):
             params = urllib.parse.parse_qs(self.path.split("?")[1])
             self.server.token = params["code"][0]
             token_holder.append(self.server.token)
@@ -166,11 +167,11 @@ def login_vault(client: Client) -> None:
             role_id=Config.VAULT_ROLE_ID, secret_id=Config.VAULT_SECRET_ID
         )
     else:
-        err_msg: str = "No valid authentication method found."
+        err_msg = "No valid authentication method found."
         raise ValueError(err_msg)
 
     if not client.is_authenticated():
-        err_msg: str = "Vault authentication failed"
+        err_msg = "Vault authentication failed"
         raise exceptions.VaultError(err_msg)
 
     store_token(client.token)
