@@ -42,10 +42,14 @@ dev = [
     "coverage",
     "pytest-mock",
     "hatch-vcs",
+    "types-requests",
+    "types-cachetools",
 ]
 
 build = [
-  "hatch-vcs"
+  "hatch",
+  "hatch-vcs",
+  "twine",
 ]
 
 [project.urls]
@@ -54,8 +58,10 @@ Issues = "https://github.com/qatoolist/vaultutils/issues"
 Source = "https://github.com/qatoolist/vaultutils"
 
 [tool.hatch.version]
-raw-options.version_scheme = "calver-by-date"
-source="vcs"
+tag-pattern = "^v(?P<version>\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d+)$"
+source = "vcs"
+raw-options.version_scheme = "no-guess-dev"
+raw-options.local_scheme = "no-local-version"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
@@ -127,6 +133,8 @@ target-version = ['py38']
 
 [tool.ruff]
 line-length = 88
+
+[tool.ruff.lint]
 select = [
   "A",
   "ARG",
@@ -154,18 +162,18 @@ select = [
   "W",
   "YTT",
 ]
-ignore = ["E501", "PLW0602", "PLW0603", "B904", "S603", "S607", ]
+ignore = ["E501", "PLW0602", "PLW0603", "B904", "S603", "S607"]
 unfixable = [
   # Don't touch unused imports
   "F401",
 ]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-first-party = ["vaultutils"]
 
-[tool.ruff.flake8-tidy-imports]
+[tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 # Tests can use magic values, assertions, and relative imports
 "tests/**/*" = ["PLR2004", "S101", "TID252"]

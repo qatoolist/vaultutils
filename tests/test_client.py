@@ -36,7 +36,7 @@ def test_authenticate(mocker, client):
 
     token = client.authenticate()
     assert token == "test_token"  # noqa: S105
-    mock_post.assert_called_once_with("http://localhost:8001/authenticate")
+    mock_post.assert_called_once_with("http://localhost:8001/authenticate", timeout=10)
 
 
 def test_fetch_secret(mocker, client):
@@ -49,4 +49,5 @@ def test_fetch_secret(mocker, client):
     mock_post.assert_called_once_with(
         "http://localhost:8001/fetch-secret",
         json={"path": "path/to/secret", "key": "key"},
+        timeout=10,
     )

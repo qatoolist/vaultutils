@@ -23,7 +23,7 @@ def stop_server() -> None:
     host = Config.VAULT_SERVER_HOST
     port = Config.VAULT_SERVER_PORT
     try:
-        response = requests.post(f"http://{host}:{port}/shutdown")
+        response = requests.post(f"http://{host}:{port}/shutdown", timeout=10)
         if response.status_code == HTTPStatus.OK:
             logging.info("Server shutdown successfully.")
     except requests.exceptions.RequestException as e:

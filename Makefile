@@ -34,7 +34,7 @@ MAKE_TESTS ?= ""
 MAKE_PYTEST_ARGS ?=
 
 # Targets
-.PHONY: auth setup start fetch clean build install uninstall full stop test
+.PHONY: auth setup start fetch clean build release install uninstall full stop test
 
 test:
 	pytest --capture=tee-sys ${MAKE_PYTEST_ARGS} ${MAKE_TESTS}
@@ -63,8 +63,12 @@ clean:
 	@rm -rf $(PROJECT_NAME).egg-info
 
 build: clean
-	@echo "Building the project..."
-	@hatch build
+        @echo "Building the project..."
+        @hatch build
+
+release:
+        @echo "Creating version tag and pushing to origin..."
+        @python scripts/release.py
 
 uninstall:
 	@echo "Uninstalling the project..."

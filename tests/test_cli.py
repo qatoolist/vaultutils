@@ -40,9 +40,9 @@ def test_fetch_secret(runner: CliRunner, mocker) -> None:
     result = runner.invoke(cli, ["fetch-secret", "path/to/secret", "key"])
 
     # Check for exit code and output
-    assert (
-        result.exit_code == 0
-    ), f"Unexpected exit code: {result.exit_code}, output: {result.output}"
+    assert result.exit_code == 0, (
+        f"Unexpected exit code: {result.exit_code}, output: {result.output}"
+    )
     assert "key" in result.output
     assert "value" in result.output
 
